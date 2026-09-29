@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Dashboard')}"></head>
+<body class="app">
+<aside th:replace="~{fragments :: side('dash')}"></aside>
+<main class="content">
+  <header class="top">
+    <div><h2 th:text="'Hello, ' + ${user.fullName}">Hello</h2><p class="muted">Here is where your tasks stand today.</p></div>
+    <a class="btn sm" th:href="@{/tasks/new}"><i class="bi bi-plus-lg"></i> New task</a>
+  </header>
+
+  <section class="stats">
+    <div class="stat"><i class="bi bi-list-task"></i><b th:text="${total}">0</b><span>Total</span></div>
+    <div class="stat"><i class="bi bi-hourglass-split"></i><b th:text="${pending}">0</b><span>Pending</span></div>
+    <div class="stat late"><i class="bi bi-exclamation-triangle"></i><b th:text="${overdue}">0</b><span>Overdue</span></div>
+    <div class="stat ok"><i class="bi bi-check2-circle"></i><b th:text="${done}">0</b><span>Completed</span></div>
+  </section>
+  <div class="bar" title="Completion"><i th:style="'width:' + ${pct} + '%'"></i></div>
+  <p class="muted small"><span th:text="${pct}">0</span>% of your tasks are done</p>
+
+  <nav class="tabs">
+    <a th:href="@{/dashboard}" th:classappend="${view == 'all'} ? 'on'">All</a>
+    <a th:href="@{/dashboard(view='today')}" th:classappend="${view == 'today'} ? 'on'">Today</a>
+    <a th:href="@{/dashboard(view='upcoming')}" th:classappend="${view == 'upcoming'} ? 'on'">Upcoming</a>
+    <a th:href="@{/dashboard(view='overdue')}" th:classappend="${view == 'overdue'} ? 'on'">Overdue</a>
+    <a th:href="@{/dashboard(view='done')}" th:classappend="${view == 'done'} ? 'on'">Completed</a>
+  </nav>
+
+  <form class="filters" th:action="@{/dashboard}" method="get">
+    <input type="hidden" name="view" th:value="${view}">
+    <input type="search" name="q" th:value="${q}" placeholder="Search tasks">
+    <select name="cat"><option value="">All categories</option>
+      <option th:each="c : ${cats}" th:value="${c.id}" th:text="${c.name}" th:selected="${c.id == cat}"></option></select>
+    <select name="pr"><option value="">Any priority</option>
+      <option th:each="p : ${priorities}" th:value="${p}" th:text="${p.label}" th:selected="${p == pr}"></option></select>
+    <select name="sort">
+      <option value="due" th:selected="${sort == 'due'}">Sort: due date</option>
+      <option value="priority" th:selected="${sort == 'priority'}">Sort: priority</option>
+      <option value="new" th:selected="${sort == 'new'}">Sort: newest</option></select>
+    <button class="btn sm"><i class="bi bi-funnel"></i> Apply</button>
+  </form>
+
+  <section class="tasks">
+    <article class="task" th:each="t : ${list}" th:classappend="${t.done} ? 'is-done'">
+      <form th:action="@{/tasks/{id}/toggle(id=${t.id})}" method="post">
+        <button class="chk" th:title="${t.done} ? 'Mark as pending' : 'Mark as done'"><i class="bi" th:classappend="${t.done} ? 'bi-check-circle-fill' : 'bi-circle'"></i></button>
+      </form>
+      <div class="tbody">
+        <h3 th:text="${t.title}">Title</h3>
+        <p class="muted" th:if="${t.description}" th:text="${t.description}"></p>
+        <div class="meta">
+          <span class="badge" th:classappend="'p-' + ${t.priority.name().toLowerCase()}" th:text="${t.priority.label}"></span>
+          <span class="cat" th:if="${t.category}"><i class="dot" th:style="'background:' + ${t.category.colorCode}"></i><span th:text="${t.category.name}"></span></span>
+          <span class="due" th:if="${t.dueDate}" th:classappend="${t.overdue} ? 'late'"><i class="bi bi-calendar-event"></i> <span th:text="${#temporals.format(t.dueDate, 'dd MMM yyyy')}"></span></span>
+        </div>
+      </div>
+      <div class="acts">
+        <a th:href="@{/tasks/{id}/edit(id=${t.id})}" title="Edit"><i class="bi bi-pencil-square"></i></a>
+        <form th:action="@{/tasks/{id}/delete(id=${t.id})}" method="post" onsubmit="return confirm('Delete this task?')"><button title="Delete"><i class="bi bi-trash3"></i></button></form>
+      </div>
+    </article>
+    <div class="empty" th:if="${#lists.isEmpty(list)}">
+      <i class="bi bi-inbox"></i>
+      <p>No tasks here yet.</p>
+      <a class="btn sm" th:href="@{/tasks/new}">Add your first task</a>
+    </div>
+  </section>
+</main>
+</body>
+</html>

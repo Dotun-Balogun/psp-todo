@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Create account')}"></head>
+<body class="auth">
+<section class="auth-side">
+  <img th:src="@{/img/crest.png}" alt="Plateau State Polytechnic crest">
+  <h1>Plateau State Polytechnic</h1>
+  <p>Technology for Progress. Create your account to start.</p>
+</section>
+<main class="auth-card">
+  <h2>Create your account</h2>
+  <p class="muted">It takes less than a minute.</p>
+  <form th:action="@{/register}" th:object="${form}" method="post" novalidate>
+    <label for="fn">Full name</label>
+    <input id="fn" th:field="*{fullName}" autocomplete="name">
+    <small class="fe" th:errors="*{fullName}"></small>
+    <label for="un">Username</label>
+    <input id="un" th:field="*{username}" autocomplete="username">
+    <small class="fe" th:errors="*{username}"></small>
+    <label for="em">Email</label>
+    <input id="em" type="email" th:field="*{email}" autocomplete="email">
+    <small class="fe" th:errors="*{email}"></small>
+    <label for="pw">Password</label>
+    <span class="pw"><input id="pw" type="password" th:field="*{password}" autocomplete="new-password"><button type="button" class="eye" aria-label="Show password"><i class="bi bi-eye"></i></button></span>
+    <small class="fe" th:errors="*{password}"></small>
+    <label for="cf">Confirm password</label>
+    <span class="pw"><input id="cf" type="password" th:field="*{confirm}" autocomplete="new-password"><button type="button" class="eye" aria-label="Show password"><i class="bi bi-eye"></i></button></span>
+    <small class="fe" th:errors="*{confirm}"></small>
+    <button class="btn">Create account</button>
+  </form>
+  <p class="muted">Already registered? <a th:href="@{/login}">Sign in</a></p>
+</main>
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>

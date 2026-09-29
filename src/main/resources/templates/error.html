@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Error')}"></head>
+<body class="err-page">
+<main>
+  <img th:src="@{/img/crest.png}" alt="PSP crest">
+  <h1 th:text="${status}">500</h1>
+  <p th:text="${status == 404 ? 'We could not find that page or task.' : status == 403 ? 'You do not have permission to open this page.' : status == 503 ? 'The service is temporarily unavailable. Please try again in a minute.' : 'Something went wrong on our side. Please try again.'}"></p>
+  <a class="btn sm" th:href="@{/dashboard}">Back to dashboard</a>
+</main>
+</body>
+</html>

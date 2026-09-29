@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Task')}"></head>
+<body class="app">
+<aside th:replace="~{fragments :: side('new')}"></aside>
+<main class="content">
+  <header class="top"><h2 th:text="${form.id == null} ? 'New task' : 'Edit task'">New task</h2></header>
+  <form class="card-form" th:action="@{/tasks}" th:object="${form}" method="post">
+    <input type="hidden" th:field="*{id}">
+    <label for="t">Title</label>
+    <input id="t" th:field="*{title}" autofocus>
+    <small class="fe" th:errors="*{title}"></small>
+    <label for="d">Description</label>
+    <textarea id="d" rows="4" th:field="*{description}"></textarea>
+    <small class="fe" th:errors="*{description}"></small>
+    <div class="row">
+      <div><label for="dd">Due date</label><input id="dd" type="date" th:field="*{dueDate}"></div>
+      <div><label for="pr">Priority</label>
+        <select id="pr" th:field="*{priority}"><option th:each="p : ${priorities}" th:value="${p}" th:text="${p.label}"></option></select></div>
+      <div><label for="ct">Category</label>
+        <select id="ct" th:field="*{categoryId}"><option value="">None</option>
+          <option th:each="c : ${cats}" th:value="${c.id}" th:text="${c.name}"></option></select></div>
+    </div>
+    <div class="row-btn">
+      <button class="btn sm"><i class="bi bi-check-lg"></i> Save task</button>
+      <a class="ghost" th:href="@{/dashboard}">Cancel</a>
+    </div>
+  </form>
+</main>
+</body>
+</html>

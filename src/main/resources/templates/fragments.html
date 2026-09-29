@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title th:text="${title} + ' · PSP Tasks'">PSP Tasks</title>
+  <link rel="icon" th:href="@{/img/crest.png}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<aside class="side" th:fragment="side(active)">
+  <div class="brand"><img th:src="@{/img/crest.png}" alt="PSP crest"><span>PSP Tasks</span></div>
+  <nav>
+    <a th:href="@{/dashboard}" th:classappend="${active == 'dash'} ? 'on'"><i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span></a>
+    <a th:href="@{/tasks/new}" th:classappend="${active == 'new'} ? 'on'"><i class="bi bi-plus-circle-fill"></i><span>New task</span></a>
+  </nav>
+  <form th:action="@{/logout}" method="post"><button class="out"><i class="bi bi-box-arrow-right"></i><span>Sign out</span></button></form>
+</aside>
+</body>
+</html>

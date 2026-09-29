@@ -1,0 +1,6 @@
+package com.psp.todo.repo;
+
+import com.psp.todo.model.Category;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface CategoryRepository extends JpaRepository<Category, Long> {}
